@@ -1,0 +1,141 @@
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div>
+          <h1 class="brand-title">+Educação+Família</h1>
+          
+        </div>
+      </div>
+
+      <div class="header-status">
+        <span 
+          class="status-pill"
+          [class.online]="aluno().statusNaEscola"
+          [class.offline]="!aluno().statusNaEscola"
+        >
+          {{ aluno().statusNaEscola ? 'Na escola agora' : 'Fora da escola' }}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  
+  <section class="perfil">
+    <div class="avatar">
+      {{ aluno().nome.charAt(0) }}
+    </div>
+
+    <div class="perfil-info">
+      <h2>{{ aluno().nome }}</h2>
+      <p>Sala {{ aluno().sala }}</p>
+
+      <div class="perfil-stats">
+        <div>
+          <strong>{{ aluno().materias.length }}</strong>
+          <span>Matérias</span>
+        </div>
+
+        <div>
+          <strong>{{ aluno().totalAulasAnuais }}</strong>
+          <span>Aulas/ano</span>
+        </div>
+
+        <div>
+          <strong>{{ mediaGeral() }}</strong>
+          <span>Média</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <main class="main">
+
+    <div class="detalhe">
+      <div class="detalhe-header">
+        <h3 class="detalhe-titulo">Desempenho por Matéria</h3>
+      </div>
+
+      <div class="materias-lista">
+        @for (m of aluno().materias; track m.nome) {
+
+          <div class="materia-row">
+
+            
+            <div class="materia-nome">{{ m.nome }}</div>
+
+            
+            <div class="materia-nota-wrap">
+              <span class="materia-label">Nota</span>
+              <span class="materia-nota" [class]="statusNota(m.nota)">
+                {{ m.nota }}
+              </span>
+            </div>
+
+            
+            <div class="materia-falta-wrap">
+              <div class="falta-topo">
+                <span class="materia-label">Faltas</span>
+                <span class="falta-nums">
+                  {{ m.faltas }}/{{ m.aulasDadas }}
+                  <span class="falta-pct" [class]="statusFalta(porcentagemFaltas(m))">
+                    {{ porcentagemFaltas(m) }}%
+                  </span>
+                </span>
+              </div>
+
+              <div class="barra-fundo">
+                <div
+                  class="barra-presenca"
+                  [class]="statusFalta(porcentagemFaltas(m))"
+                  [style.width.%]="porcentagemPresenca(m)">
+                </div>
+              </div>
+
+              <div class="barra-legenda">
+                
+                <span>Presença: {{ porcentagemPresenca(m) }}%</span>
+                
+              </div>
+            </div>
+
+            
+            <div class="aulas-anuais">
+              <span class="materia-label">Progresso anual</span>
+
+              <div class="barra-fundo">
+                <div
+                  class="barra-progresso"
+                  [style.width.%]="(m.aulasDadas / aluno().totalAulasAnuais) * 100">
+                </div>
+              </div>
+
+              <span class="aulas-texto">
+                {{ m.aulasDadas }} de {{ aluno().totalAulasAnuais }} aulas
+                ({{ ((m.aulasDadas / aluno().totalAulasAnuais) * 100).toFixed(0) }}%)
+              </span>
+            </div>
+
+          </div>
+
+        }
+      </div>
+    </div>
+
+  </main>
+
+  
+  <footer class="legenda">
+    <span class="leg-item"><span class="badge aprovado">7–10</span> Aprovado</span>
+    <span class="leg-item"><span class="badge recuperacao">5–6.9</span> Recuperação</span>
+    <span class="leg-item"><span class="badge reprovado">0–4.9</span> Reprovado</span>
+    <span class="leg-sep">|</span>
+    <span class="leg-item"><span class="dot ok"></span> Presença  OK (>85%)</span>
+    <span class="leg-item"><span class="dot atencao"></span>  Atenção (≤85%)</span>
+    <span class="leg-item"><span class="dot critico"></span> Crítico (≤75%)</span>
+  </footer>
+
+</div>
