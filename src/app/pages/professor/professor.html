@@ -1,92 +1,158 @@
 <div class="page">
 
-  
+  <!-- HEADER -->
   <header class="header">
-    <h1>Painel do Professor - {{ materia }}</h1>
+    <div class="header-inner">
+
+      <div class="header-brand">
+        <div class="logo">👨‍🏫</div>
+        <div>
+          <h1 class="brand-title">Painel do Professor</h1>
+          <span class="brand-subtitle">{{ materia }}</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a routerLink="/professor" routerLinkActive="active">Sala de Aula</a>
+        <a routerLink="/mural" routerLinkActive="active">Mural</a>
+      </nav>
+
+      <div class="header-right">
+
+        <div class="user-menu-wrapper">
+
+          <div class="user-box" (click)="toggleMenu()">
+            <div class="user-avatar">P</div>
+            <div class="user-info">
+              <strong>Professor</strong>
+              <span>{{ materia }}</span>
+            </div>
+          </div>
+
+          @if(menuAberto){
+            <div class="dropdown-menu">
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item sair" (click)="logout()">
+                Sair da conta
+              </button>
+            </div>
+          }
+
+        </div>
+
+      </div>
+
+    </div>
   </header>
 
-  
-  <div class="lista">
-    @for (a of alunosOrdenados(); track a.posicao) {
-      <div class="aluno" (click)="selecionar(a)">
-        <strong>{{ a.nome }}</strong>
-        <label  class = "label-notas" for="number">Nota: </label>
-        <span [class]="statusNota(a.nota)">{{ a.nota }}</span>
-        <br>
-
-        <label  class = "label-faltas" for="number">faltas: </label>
-        <span>{{ a.faltas}}</span>
-      </div>
-    }
-  </div>
-
-  <!-- EDITOR -->
+  <!-- ================= EDITOR ================= -->
   @if (alunoSelecionado()) {
+
     <div class="editor">
+
       <h3>Editar: {{ alunoSelecionado()?.nome }}</h3>
 
-      <label>Nota:
-        <input type="number" [(ngModel)]="alunoSelecionado()!.nota">
+      <label>
+        Nota Matemática
+        <input
+          type="number"
+          [ngModel]="notaMatematica(alunoSelecionado()!)"
+          (ngModelChange)="atualizarNota($event)"
+        >
       </label>
 
-      <label>Faltas:
-        <input type="number" [(ngModel)]="alunoSelecionado()!.faltas">
+      <label>
+        Faltas Matemática
+        <input
+          type="number"
+          [ngModel]="faltasMatematica(alunoSelecionado()!)"
+          (ngModelChange)="atualizarFaltas($event)"
+        >
       </label>
 
       <label class="check">
-        <input type="checkbox" [(ngModel)]="alunoSelecionado()!.naEscola">
+        <input
+          type="checkbox"
+          [(ngModel)]="alunoSelecionado()!.naEscola"
+        >
         Está na escola
       </label>
 
-      <label>Posição:
-        <input type="number" [(ngModel)]="alunoSelecionado()!.posicao">
+      <label>
+        Posição
+        <input
+          type="number"
+          [(ngModel)]="alunoSelecionado()!.posicao"
+        >
       </label>
 
-     <button (click)="salvar()">Salvar</button>
+      <button (click)="salvar()">
+        Salvar
+      </button>
+
     </div>
+
   }
-<section class="sala">
+
+  <!-- ================= LISTA ================= -->
+  <div class="lista">
+
+    @for (a of alunosOrdenados(); track a.id) {
+
+      <div class="aluno" (click)="selecionar(a)">
+
+        <div class="aluno-top">
+          <strong>{{ a.nome }}</strong>
+
+          <span class="badge" [class]="statusNota(notaMatematica(a))">
+            {{ notaMatematica(a) }}
+          </span>
+        </div>
+
+        <div class="aluno-bottom">
+          <span>Faltas: {{ faltasMatematica(a) }}</span>
+
+          <span class="status" [class.off]="!a.naEscola">
+            {{ a.naEscola ? 'Na escola' : 'Ausente' }}
+          </span>
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+  <section class="sala">
 
   @for (row of linhas(); track $index) {
 
     <div class="row">
 
-      
-      @for (a of row.slice(0,2); track $index) {
+      @for (a of row; track a?.id) {
+
         @if (a) {
+
           <div class="seat"
                [class.fora]="!a.naEscola"
-               [ngClass]="statusNota(a.nota)"
+               [ngClass]="statusNota(notaMatematica(a))"
                (click)="selecionar(a)">
+
             <img src="cadeira.png" class="seat-icon" />
+
             <div class="seat-info">
               <span class="nome">{{ a.nome }}</span>
-              <small>{{ a.nota }}</small>
+              <small>{{ notaMatematica(a) }}</small>
             </div>
-          </div>
-        } @else {
-          <div class="seat vazio"></div>
-        }
-      }
 
-      <div class="corredor"></div>
-
-    
-      @for (a of row.slice(2,4); track $index) {
-        @if (a) {
-          <div class="seat"
-               [class.fora]="!a.naEscola"
-               [ngClass]="statusNota(a.nota)"
-               (click)="selecionar(a)">
-            <img src="cadeira.png" class="seat-icon" />
-            <div class="seat-info">
-              <span class="nome">{{ a.nome }}</span>
-              <small>{{ a.nota }}</small>
-            </div>
           </div>
+
         } @else {
+
           <div class="seat vazio"></div>
+
         }
+
       }
 
     </div>
@@ -94,5 +160,3 @@
   }
 
 </section>
-
-</div>

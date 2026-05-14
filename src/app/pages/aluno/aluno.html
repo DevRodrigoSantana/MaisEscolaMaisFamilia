@@ -2,140 +2,314 @@
 
   <!-- HEADER -->
   <header class="header">
+
     <div class="header-inner">
+
+      <!-- BRAND -->
       <div class="header-brand">
-        <div>
-          <h1 class="brand-title">+Educação+Família</h1>
-          
+
+        <div class="logo">
+          🎓
         </div>
+
+        <div>
+
+          <h1 class="brand-title">
+            +Educação+Família
+          </h1>
+
+          <span class="brand-subtitle">
+            Portal do aluno
+          </span>
+
+        </div>
+
       </div>
 
-      <div class="header-status">
-        <span 
-          class="status-pill"
-          [class.online]="aluno().statusNaEscola"
-          [class.offline]="!aluno().statusNaEscola"
+      <!-- NAV -->
+      <nav class="nav">
+
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{
+            exact: true
+          }"
         >
-          {{ aluno().statusNaEscola ? 'Na escola agora' : 'Fora da escola' }}
+          Desempenho
+        </a>
+
+        <a
+          routerLink="/mural-aluno"
+          routerLinkActive="active"
+        >
+          Mural de Avisos
+        </a>
+
+      </nav>
+
+      <!-- RIGHT -->
+      <div class="header-right">
+
+        <span
+          class="status-pill"
+          [class.online]="aluno().naEscola"
+          [class.offline]="!aluno().naEscola"
+        >
+
+          {{
+            aluno().naEscola
+              ? 'Na escola agora'
+              : 'Fora da escola'
+          }}
+
         </span>
+
+        <!-- USER -->
+        <div class="user-menu-wrapper">
+
+          <div
+            class="user-box"
+            (click)="toggleMenu()"
+          >
+
+            <div class="user-avatar">
+
+              {{ aluno().nome.charAt(0) }}
+
+            </div>
+
+            <div class="user-info">
+
+              <strong>
+                {{ aluno().nome }}
+              </strong>
+
+              <span>
+                Aluno
+              </span>
+
+            </div>
+
+          </div>
+
+          @if(menuAberto){
+
+            <div class="dropdown-menu">
+
+              <div class="dropdown-user">
+
+                <div class="dropdown-avatar">
+
+                  {{ aluno().nome.charAt(0) }}
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ aluno().nome }}
+                  </strong>
+
+                  <p>
+                    Portal do aluno
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div class="dropdown-divider"></div>
+
+              <button
+                class="dropdown-item sair"
+                (click)="logout()"
+              >
+                Sair da conta
+              </button>
+
+            </div>
+
+          }
+
+        </div>
+
       </div>
+
     </div>
+
   </header>
 
-  
+  <!-- PERFIL -->
   <section class="perfil">
+
     <div class="avatar">
+
       {{ aluno().nome.charAt(0) }}
+
     </div>
 
     <div class="perfil-info">
-      <h2>{{ aluno().nome }}</h2>
-      <p>Sala {{ aluno().sala }}</p>
+
+      <h2>
+        {{ aluno().nome }}
+      </h2>
+
+      <p>
+
+        Posição:
+        {{ aluno().posicao }}
+
+      </p>
 
       <div class="perfil-stats">
+
         <div>
-          <strong>{{ aluno().materias.length }}</strong>
-          <span>Matérias</span>
+
+          <strong>
+            {{ aluno().materias.length }}
+          </strong>
+
+          <span>
+            Matérias
+          </span>
+
         </div>
 
         <div>
-          <strong>{{ aluno().totalAulasAnuais }}</strong>
-          <span>Aulas/ano</span>
+
+          <strong>
+            {{ mediaGeral() }}
+          </strong>
+
+          <span>
+            Média Geral
+          </span>
+
         </div>
 
         <div>
-          <strong>{{ mediaGeral() }}</strong>
-          <span>Média</span>
+
+          <strong>
+
+            {{
+              aluno().naEscola
+                ? 'Online'
+                : 'Offline'
+            }}
+
+          </strong>
+
+          <span>
+            Status
+          </span>
+
         </div>
+
       </div>
+
     </div>
+
   </section>
 
-  
+  <!-- MAIN -->
   <main class="main">
 
     <div class="detalhe">
+
       <div class="detalhe-header">
-        <h3 class="detalhe-titulo">Desempenho por Matéria</h3>
+
+        <h3 class="detalhe-titulo">
+          Desempenho por Matéria
+        </h3>
+
       </div>
 
       <div class="materias-lista">
-        @for (m of aluno().materias; track m.nome) {
+
+        @for (
+          m of aluno().materias;
+          track m.nome
+        ) {
 
           <div class="materia-row">
 
-            
-            <div class="materia-nome">{{ m.nome }}</div>
+            <!-- NOME -->
+            <div class="materia-nome">
+              {{ m.nome }}
+            </div>
 
-            
+            <!-- NOTA -->
             <div class="materia-nota-wrap">
-              <span class="materia-label">Nota</span>
-              <span class="materia-nota" [class]="statusNota(m.nota)">
+
+              <span class="materia-label">
+                Nota
+              </span>
+
+              <span
+                class="materia-nota"
+                [class]="statusNota(m.nota)"
+              >
                 {{ m.nota }}
               </span>
+
             </div>
 
-            
+            <!-- FALTAS -->
             <div class="materia-falta-wrap">
+
               <div class="falta-topo">
-                <span class="materia-label">Faltas</span>
-                <span class="falta-nums">
-                  {{ m.faltas }}/{{ m.aulasDadas }}
-                  <span class="falta-pct" [class]="statusFalta(porcentagemFaltas(m))">
-                    {{ porcentagemFaltas(m) }}%
-                  </span>
+
+                <span class="materia-label">
+                  Faltas
                 </span>
+
+                <span class="falta-nums">
+
+                  {{ m.faltas }}/{{ m.aulasDadas }}
+
+                  <span
+                    class="falta-pct"
+                    [class]="statusFalta(
+                      porcentagemFaltas(m)
+                    )"
+                  >
+
+                    {{
+                      porcentagemFaltas(m)
+                    }}%
+
+                  </span>
+
+                </span>
+
               </div>
 
               <div class="barra-fundo">
+
                 <div
                   class="barra-presenca"
-                  [class]="statusFalta(porcentagemFaltas(m))"
-                  [style.width.%]="porcentagemPresenca(m)">
+                  [class]="statusFalta(
+                    porcentagemFaltas(m)
+                  )"
+                  [style.width.%]="
+                    porcentagemPresenca(m)
+                  "
+                >
                 </div>
+
               </div>
 
-              <div class="barra-legenda">
-                
-                <span>Presença: {{ porcentagemPresenca(m) }}%</span>
-                
-              </div>
-            </div>
-
-            
-            <div class="aulas-anuais">
-              <span class="materia-label">Progresso anual</span>
-
-              <div class="barra-fundo">
-                <div
-                  class="barra-progresso"
-                  [style.width.%]="(m.aulasDadas / aluno().totalAulasAnuais) * 100">
-                </div>
-              </div>
-
-              <span class="aulas-texto">
-                {{ m.aulasDadas }} de {{ aluno().totalAulasAnuais }} aulas
-                ({{ ((m.aulasDadas / aluno().totalAulasAnuais) * 100).toFixed(0) }}%)
-              </span>
             </div>
 
           </div>
 
         }
+
       </div>
+
     </div>
 
   </main>
-
-  
-  <footer class="legenda">
-    <span class="leg-item"><span class="badge aprovado">7–10</span> Aprovado</span>
-    <span class="leg-item"><span class="badge recuperacao">5–6.9</span> Recuperação</span>
-    <span class="leg-item"><span class="badge reprovado">0–4.9</span> Reprovado</span>
-    <span class="leg-sep">|</span>
-    <span class="leg-item"><span class="dot ok"></span> Presença  OK (>85%)</span>
-    <span class="leg-item"><span class="dot atencao"></span>  Atenção (≤85%)</span>
-    <span class="leg-item"><span class="dot critico"></span> Crítico (≤75%)</span>
-  </footer>
 
 </div>

@@ -1,0 +1,16 @@
+<div class="mural">
+
+  <h2>Mural da Escola</h2>
+
+  <div class="mural-container">
+
+    @for (aviso of mural.avisos(); track aviso.id) {
+      <app-aviso-view
+        class="aviso-bolha"
+        [aviso]="aviso">
+      </app-aviso-view>
+    }
+
+  </div>
+
+</div>

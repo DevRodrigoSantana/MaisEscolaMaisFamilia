@@ -1,0 +1,60 @@
+<div class="page">
+
+  <header class="header">
+    <h1>Mural da Escola</h1>
+  </header>
+
+  <!-- FORM -->
+  <div class="editor">
+
+    <h3>{{ editandoId ? 'Editar Aviso' : 'Novo Aviso' }}</h3>
+
+    <label>
+      Título
+      <input type="text" [(ngModel)]="titulo">
+    </label>
+
+    <label>
+      Descrição
+      <textarea [(ngModel)]="descricao"></textarea>
+    </label>
+
+    <button (click)="criarAviso()">
+      {{ editandoId ? 'Atualizar' : 'Publicar' }}
+    </button>
+
+  </div>
+
+  <!-- LISTA -->
+  <div class="lista">
+
+    @for (aviso of mural.avisos(); track aviso.id) {
+
+      <div class="card">
+
+        <div class="card-top">
+          <h3>{{ aviso.titulo }}</h3>
+          <small>{{ aviso.data }}</small>
+        </div>
+
+        <p>{{ aviso.descricao }}</p>
+
+        <div class="actions">
+
+          <button (click)="editarAviso(aviso.id)">
+            Editar
+          </button>
+
+          <button (click)="deletarAviso(aviso.id)">
+            Excluir
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>

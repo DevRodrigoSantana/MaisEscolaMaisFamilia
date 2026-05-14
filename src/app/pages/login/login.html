@@ -1,0 +1,147 @@
+<div class="login-page">
+
+  <div class="bg-gradient"></div>
+
+  <div class="login-container">
+
+    <!-- LEFT -->
+
+    <section class="login-left">
+
+      <div class="logo-box">
+        🎓
+      </div>
+
+      <h1>
+        +Educação+Família
+      </h1>
+
+      <p class="subtitle">
+        Plataforma inteligente
+        de comunicação escolar
+      </p>
+
+      <div class="features">
+
+        <div class="feature-card">
+          <span>📚</span>
+
+          <div>
+            <strong>
+              Notas em tempo real
+            </strong>
+
+            <p>
+              Acompanhe desempenho
+              escolar facilmente
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span>🔔</span>
+
+          <div>
+            <strong>
+              Mural inteligente
+            </strong>
+
+            <p>
+              Avisos importantes
+              sempre atualizados
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-card">
+          <span>👨‍🏫</span>
+
+          <div>
+            <strong>
+              Perfis personalizados
+            </strong>
+
+            <p>
+              Experiência diferente
+              para professores e pais
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- RIGHT -->
+
+    <section class="login-right">
+
+      <div class="login-card">
+
+        <div class="login-top">
+
+          <h2>
+            Entrar
+          </h2>
+
+          <p>
+            Faça login para continuar
+          </p>
+
+        </div>
+
+        <form
+          class="login-form"
+          (ngSubmit)="entrar()"
+        >
+
+          <div class="input-group">
+
+            <label>Email</label>
+
+            <input
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              placeholder="Digite seu email"
+            />
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Senha</label>
+
+            <input
+              type="password"
+              [(ngModel)]="senha"
+              name="senha"
+              placeholder="Digite sua senha"
+            />
+
+          </div>
+
+          @if (erro) {
+
+            <div class="erro">
+              {{ erro }}
+            </div>
+
+          }
+
+          <button
+            class="login-btn"
+            type="submit"
+          >
+            Entrar no sistema
+          </button>
+
+        </form>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
